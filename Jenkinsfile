@@ -1,31 +1,42 @@
+
+---
+
+### ✅ `Jenkinsfile` (Without Maven)
+
+```groovy
 pipeline {
     agent any
 
     tools {
-        jdk 'JDK 21'              // Match the name set in Jenkins > Global Tool Configuration
-        maven 'Maven 3.9.9'       // Match the name set in Jenkins > Global Tool Configuration
+        jdk 'JDK 21'   // This must match the name in Jenkins > Global Tool Configuration
     }
-   
+
     stages {
-        
-        stage('Debug Maven') {
-             steps {
-        bat 'where mvn'
-        bat 'mvn -version'
-           }
-        }
-            stage('Build and Test') {
+        stage('Checkout') {
             steps {
-                bat 'mvn clean test'
+                checkout scm
             }
         }
-        
-    }
-    post {
-        always {
-            junit 'target/surefire-reports/*.xml'
+
+        stage('Compile') {
+            steps {
+                sh 'javac HelloWorld.java'
+            }
+        }
+
+        stage('Run') {
+            steps {
+                sh 'java HelloWorld'
+            }
         }
     }
+
+    post {
+        success {
+            echo 'Execution successful!'
+        }
+        failure {
+            echo 'Execution failed.'
+        }
     }
-
-
+}
