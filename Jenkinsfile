@@ -1,14 +1,8 @@
-
----
-
-
-
-```groovy
 pipeline {
     agent any
 
     tools {
-        jdk 'JDK 21'   // This must match the name in Jenkins > Global Tool Configuration
+        jdk 'JDK 21'
     }
 
     stages {
